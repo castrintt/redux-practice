@@ -1,17 +1,21 @@
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addLanguages, useLanguages, toFavorite } from "./redux/sliceLanguages";
+import { addLanguages, toFavorite } from "./redux/sliceLanguages";
 import { useState } from "react";
-
+import { increment, decrement } from "./redux/sliceCounter";
+import { RootState } from "./redux/store";
 function App() {
-  const languages = useSelector(useLanguages);
+  const { counter } = useSelector((state: RootState) => state.counter);
+  const { languages } = useSelector((state: RootState) => state.languages);
   const [newLanguage, setNewLanguage] = useState<string>("");
   const dispatch = useDispatch();
+
   return (
     <div className="App">
       <ul>
         {languages.map((values, index) => (
-          <>
-            <div key={index}>
+          <React.Fragment key={index}>
+            <div>
               <span style={{ margin: "2rem" }}>
                 {values.name.toUpperCase()}
               </span>
@@ -22,7 +26,7 @@ function App() {
                 {values.favorite ? "Desfavoritar" : "Favoritar"}
               </button>
             </div>
-          </>
+          </React.Fragment>
         ))}
       </ul>
       <div>
@@ -37,6 +41,11 @@ function App() {
         >
           Adicionar linguagem
         </button>
+      </div>
+      <div>
+        <h1>{counter}</h1>
+        <button onClick={() => dispatch(increment())}>AUMENTAR</button>
+        <button onClick={() => dispatch(decrement())}>DIMINUIR</button>
       </div>
     </div>
   );
